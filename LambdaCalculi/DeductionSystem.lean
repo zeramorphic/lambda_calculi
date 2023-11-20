@@ -23,15 +23,15 @@ export DeductionSystem (proof castProof)
 variable [DeductionSystem α β]
 
 /-- A deduction system has *permutation* if proofs are stable under permutation of the context. -/
-class Permutation (α β : Type _) [DeductionSystem α β] where
+class PermutationSystem (α β : Type _) [DeductionSystem α β] where
   permute (Γ₁ : List α) (γ₁ γ₂ : α) (Γ₂ : List α) (C : β) :
     proof (Γ₁ ++ γ₁ :: γ₂ :: Γ₂ ⊢ C) ≃ proof (Γ₁ ++ γ₂ :: γ₁ :: Γ₂ ⊢ C)
 
-export Permutation (permute)
+export PermutationSystem (permute)
 
 section Permutation
 
-variable [Permutation α β]
+variable [PermutationSystem α β]
 
 def permuteHead (γ₁ γ₂ : α) (Γ : List α) (C : β) :
     proof (γ₁ :: γ₂ :: Γ ⊢ C) ≃ proof (γ₂ :: γ₁ :: Γ ⊢ C) :=
@@ -59,25 +59,28 @@ def permuteAppend : (Γ₁ Γ₂ : List α) → (C : β) →
 end Permutation
 
 /-- A deduction system has *weakening* if proofs are stable under increasing the context. -/
-class Weakening (α β : Type _) [DeductionSystem α β] where
+class WeakeningSystem (α β : Type _) [DeductionSystem α β] where
   weaken' (Γ₁ Γ₂ : List α) (C : β) :
     proof (Γ₁ ⊢ C) → proof (Γ₂ ++ Γ₁ ⊢ C)
 
 /-- A deduction system has *contraction* if a duplicate hypothesis can be removed. -/
-class Contraction (α β : Type _) [DeductionSystem α β] where
+class ContractionSystem (α β : Type _) [DeductionSystem α β] where
   contract (Γ : List α) (γ : α) (C : β) (h : γ ∈ Γ) :
     proof (γ :: Γ₁ ⊢ C) → proof (Γ₁ ⊢ C)
 
-export Contraction (contract)
+export ContractionSystem (contract)
 
-def contract' [Contraction α β] :
+def contract' [ContractionSystem α β] :
     (Γ₁ Γ₂ : List α) → (C : β) → (h : Γ₁ ⊆ Γ₂) →
     proof (Γ₁ ++ Γ₂ ⊢ C) → proof (Γ₂ ⊢ C)
   | [], _, _, _, pf => pf
   | γ :: Γ₁, Γ₂, C, h, pf =>
       contract' Γ₁ Γ₂ C (by aesop) (contract (Γ₁ ++ Γ₂) γ C (by aesop) pf)
 
-def weaken [Weakening α β] [Permutation α β] [Contraction α β]
+/-- The *weakening* rule, expressed using contraction and permutation:
+we can weaken the hypotheses of a proof to any superset of hypotheses.
+Note that the list subset operation does not count multiplicity, so we need contraction. -/
+def weaken [WeakeningSystem α β] [PermutationSystem α β] [ContractionSystem α β]
     (Γ₁ Γ₂ : List α) (C : β) (h : Γ₁ ⊆ Γ₂) :
     proof (Γ₁ ⊢ C) → proof (Γ₂ ⊢ C) :=
-  contract' Γ₁ Γ₂ C h ∘ permuteAppend Γ₂ Γ₁ C ∘ Weakening.weaken' Γ₁ Γ₂ C
+  contract' Γ₁ Γ₂ C h ∘ permuteAppend Γ₂ Γ₁ C ∘ WeakeningSystem.weaken' Γ₁ Γ₂ C
