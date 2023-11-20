@@ -2,7 +2,6 @@ import Lake
 open Lake DSL
 
 def moreServerArgs := #[
-  "-Dpp.unicode.fun=true", -- pretty-prints `fun a ↦ b`
   "-Dpp.proofs.withType=false"
 ]
 
@@ -19,7 +18,7 @@ def weakLeanArgs : Array String :=
   else
     #[]
 
-package «lambda_calculi» where
+package lambda_calculi where
   moreServerArgs := moreServerArgs
   -- add any package configuration options here
 
