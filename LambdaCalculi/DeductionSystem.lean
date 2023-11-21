@@ -6,6 +6,7 @@ structure Judgment (α β : Type _) where
   /-- The consequent of the judgment. -/
   right : β
 
+-- I don't know what priority this should be.
 notation:10 l " ⊢ " r => Judgment.mk l r
 
 /-- A deduction system, with given antecedent and consequent types,
