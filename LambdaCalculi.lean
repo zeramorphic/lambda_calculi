@@ -1,3 +1,2 @@
 import LambdaCalculi.DeductionSystem
-import LambdaCalculi.Logic
 import LambdaCalculi.TypeSystem

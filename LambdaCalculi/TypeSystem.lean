@@ -1,10 +1,10 @@
-import LambdaCalculi.Logic
+import LambdaCalculi.DeductionSystem
 
-structure Typing (Λ T : Type _) where
-  term : Λ
-  type : T
+/-- For each term `t : Λ` and type `τ : T`, this class assigns a value of `α`, representing
+this typing assertion. -/
+class Typing (α : Type _) (Λ T : outParam <| Type _) where
+  type : Λ → T → α
 
-notation:20 term " ∶ " type => Typing.mk term type
+notation:20 term " ∶ " type => Typing.type term type
 
-/-- A *type system* is a logic where the propositions are typing assertions. -/
-abbrev TypeSystem (Λ T : Type _) := Logic (Typing Λ T)
+variable [Typing α V T] [Typing β Λ T] [DeductionSystem α β]
