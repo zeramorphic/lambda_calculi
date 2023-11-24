@@ -1,3 +1,5 @@
 import LambdaCalculi.DeductionSystem
 import LambdaCalculi.TypeSystem
 import LambdaCalculi.LambdaCalculus
+import LambdaCalculi.Context
+import LambdaCalculi.HasType
