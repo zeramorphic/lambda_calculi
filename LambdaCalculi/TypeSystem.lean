@@ -43,7 +43,7 @@ theorem free_subst_of_not_free {t : Λ} (h : v ∉ free t) : free (t[v := s]) = 
 
 theorem free_subst_eq {t : Λ} :
     free (t[v := s]) = (free t \ {v}) ∪ {w ∈ free s | v ∈ free t} := by
-  by_cases v ∈ free t
+  by_cases h : v ∈ free t
   · simp [free_subst_of_free, h]
   · simp [subst_eq_of_not_free, h]
 
