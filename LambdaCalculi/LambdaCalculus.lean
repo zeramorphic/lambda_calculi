@@ -80,6 +80,67 @@ def freeVarRange : LambdaTerm p U C → ℕ
 | star _ => 0
 | elim _ _ x => x.freeVarRange
 
+@[simp]
+theorem freeVarRange_const :
+    (const c : LambdaTerm p U C).freeVarRange = 0 :=
+  rfl
+
+@[simp]
+theorem freeVarRange_var :
+    (var n : LambdaTerm p U C).freeVarRange = n + 1 :=
+  rfl
+
+@[simp]
+theorem freeVarRange_lambda :
+    (lambda h τ t : LambdaTerm p U C).freeVarRange = t.freeVarRange - 1 :=
+  rfl
+
+@[simp]
+theorem freeVarRange_app :
+    (app h l r : LambdaTerm p U C).freeVarRange = max l.freeVarRange r.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_pair :
+    (pair h l r : LambdaTerm p U C).freeVarRange = max l.freeVarRange r.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_fst :
+    (fst h l : LambdaTerm p U C).freeVarRange = l.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_snd :
+    (snd h r : LambdaTerm p U C).freeVarRange = r.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_inl :
+    (inl h τ l : LambdaTerm p U C).freeVarRange = l.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_inr :
+    (inr h τ r : LambdaTerm p U C).freeVarRange = r.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_case :
+    (case h l r t : LambdaTerm p U C).freeVarRange =
+      max (max l.freeVarRange r.freeVarRange - 1) t.freeVarRange :=
+  rfl
+
+@[simp]
+theorem freeVarRange_star :
+    (star h : LambdaTerm p U C).freeVarRange = 0 :=
+  rfl
+
+@[simp]
+theorem freeVarRange_elim :
+    (elim h τ t : LambdaTerm p U C).freeVarRange = t.freeVarRange :=
+  rfl
+
 def Closed (t : LambdaTerm p U C) : Prop :=
   t.freeVarRange = 0
 
